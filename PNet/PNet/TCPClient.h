@@ -6,7 +6,7 @@ namespace PNet
 	class TCPClient : public TCPConnection
 	{
 	public:
-		TCPClient(ConnectionType connectionType = ConnectionType::IPV4, SocketHandle socketHandle = INVALID_SOCKET, bool isConnected = false);
+		TCPClient(ConnectionType connectionType = ConnectionType::IPV4, SocketHandle socketHandle = INVALID_SOCKET_CONST, bool isConnected = false);
 		void Loop(const timeval timeout);
 		bool Initialize(); //Initializes master fd set
 		virtual void ProcessPackets();

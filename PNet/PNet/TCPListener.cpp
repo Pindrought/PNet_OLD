@@ -4,12 +4,8 @@
 namespace PNet
 {
 	TCPListener::TCPListener(ConnectionType connectionType)
-		:Socket(SocketType::TCP, connectionType, INVALID_SOCKET)
+		:Socket(SocketType::TCP, connectionType, INVALID_SOCKET_CONST)
 	{
-		/*if (connectionType == ConnectionType::IPV6)
-		{
-			throw std::exception("IPV6 support not yet implemented.");
-		}*/
 	}
 
 	

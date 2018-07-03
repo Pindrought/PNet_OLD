@@ -7,7 +7,7 @@ namespace PNet
 	{
 		SOCKET_NOTYPEDEFINED, //When a socket either has an invalid type or does not have the socket type defined. Expected TCP or UDP.
 		SOCKET_FAILEDTOCREATE, //When socket() returns NULL
-		SOCKET_ALREADYINITIALIZED, //when Socket::Create is called, but handle is not INVALID_SOCKET
+		SOCKET_ALREADYINITIALIZED, //when Socket::Create is called, but handle is not INVALID_SOCKET_CONST
 		SOCKET_UNEXPECTEDERROR,
 		SOCKET_CLOSEUNINITIALIZEDSOCKET, //when Socket::Close is called on a socket handle that is not valid
 		SOCKET_WSALASTERRORNOTSETUP, //this isn't set up at the moment properly

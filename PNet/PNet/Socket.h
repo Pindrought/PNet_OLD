@@ -8,10 +8,12 @@
 
 namespace PNet
 {
+	const SocketHandle INVALID_SOCKET_CONST = INVALID_SOCKET;
+
 	class Socket
 	{
 	public:
-		Socket(SocketType type, ConnectionType connectionType = ConnectionType::IPV4, SocketHandle handle = INVALID_SOCKET);
+		Socket(SocketType type, ConnectionType connectionType = ConnectionType::IPV4, SocketHandle handle = INVALID_SOCKET_CONST);
 	public:
 		SocketHandle GetHandle();
 		ConnectionType GetIPProtocol();
@@ -23,7 +25,7 @@ namespace PNet
 	private:
 		SocketType type = SocketType::INVALID;
 		ConnectionType connectionType = ConnectionType::IPV4;
-		SocketHandle handle = INVALID_SOCKET;
+		SocketHandle handle = INVALID_SOCKET_CONST;
 		bool isBlocking = false;
 	};
 }

@@ -18,7 +18,7 @@ namespace PNet
 		PRESULT result = PRESULT::SUCCESS;
 
 		//Create socket if it does not exist
-		if (GetHandle() == INVALID_SOCKET)
+		if (GetHandle() == INVALID_SOCKET_CONST)
 		{
 			result = Create();
 			if (result != PRESULT::SUCCESS)

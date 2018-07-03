@@ -55,7 +55,7 @@ namespace PNet
 			if (FD_ISSET(listener->GetHandle(), &readfds)) //if listenSocket was in readfds
 			{
 				SOCKET accept_socket_handle = accept(listener->GetHandle(), NULL, NULL);
-				if (accept_socket_handle != INVALID_SOCKET) //If new connection was properly accepted
+				if (accept_socket_handle != INVALID_SOCKET_CONST) //If new connection was properly accepted
 				{
 					TCPConnection new_connection(this->ip_protocol, accept_socket_handle, true);
 					connections.emplace_back(new_connection);

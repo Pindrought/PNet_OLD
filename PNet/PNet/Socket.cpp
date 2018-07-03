@@ -16,8 +16,10 @@ namespace PNet
 	}
 	PRESULT Socket::Create(bool isListener)
 	{
-		if (handle != INVALID_SOCKET)
+		if (handle != INVALID_SOCKET_CONST)
+		{
 			return PRESULT::SOCKET_ALREADYINITIALIZED;
+		}
 
 		if (type == SocketType::TCP || type == SocketType::UDP)
 		{
@@ -30,7 +32,7 @@ namespace PNet
 				handle = socket(PF_INET6, type == SocketType::TCP ? SOCK_STREAM : SOCK_DGRAM, type == SocketType::TCP ? IPPROTO_TCP: IPPROTO_UDP);
 			}
 
-			if (handle == INVALID_SOCKET)
+			if (handle == INVALID_SOCKET_CONST)
 			{
 				return PRESULT::SOCKET_FAILEDTOCREATE;
 			}
@@ -86,7 +88,7 @@ namespace PNet
 	}
 	PRESULT Socket::Close()
 	{
-		if (handle == INVALID_SOCKET)
+		if (handle == INVALID_SOCKET_CONST)
 			return PRESULT::SOCKET_CLOSEUNINITIALIZEDSOCKET;
 		int result = closesocket(handle);
 		if (result == 0)

@@ -9,7 +9,7 @@ const timeval timeout = { 1, 0 };
 
 int serverthread()
 {
-	TCPServer server(ConnectionType::IPV4);
+	TCPServer server(ConnectionType::IPV6);
 	auto result = server.StartListener();
 	if (result == PRESULT::SUCCESS)
 	{
@@ -17,6 +17,10 @@ int serverthread()
 		{
 			server.Loop(timeout); //accept connections / process messages / do stuff with timeout up to "timeout"
 		}
+	}
+	else
+	{
+		std::cout << PRESULTToString(result) << std::endl;
 	}
 	return 0;
 }
@@ -26,8 +30,8 @@ int main()
 	std::thread st(serverthread);
 	Sleep(500);
 
-	TCPClient myConn(ConnectionType::IPV4); //Create IPV4 Client
-	auto result = myConn.Connect(IPAddress("127.0.0.1", ConnectionType::IPV4), 8888, timeout); //Connect ipv6 client to localhost 127.0.0.1 on port 8888 with a timeout up to "timeout"
+	TCPClient myConn(ConnectionType::IPV6); //Create IPV4 Client
+	auto result = myConn.Connect(IPAddress("::1", ConnectionType::IPV6), 8888, timeout); //Connect ipv6 client to localhost 127.0.0.1 on port 8888 with a timeout up to "timeout"
 	if (myConn.IsConnected())
 	{
 		std::cout << "Connected!" << std::endl;
