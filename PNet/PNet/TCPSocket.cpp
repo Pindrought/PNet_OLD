@@ -1,4 +1,5 @@
 #include "TCPSocket.h"
+#include <iostream>
 
 namespace PNet
 {
@@ -17,19 +18,26 @@ namespace PNet
 		isConnected = false;
 		PRESULT result = PRESULT::SUCCESS;
 
+		if (ipAddress.IsValid() == false)
+		{
+            return PRESULT::TCPSOCKET_INVALIDIP;
+		}
+
 		//Create socket if it does not exist
 		if (GetHandle() == INVALID_SOCKET_CONST)
 		{
 			result = Create();
 			if (result != PRESULT::SUCCESS)
+			{
 				return result;
+            }
 		}
 
 		if (this->GetIPProtocol() == ConnectionType::IPV4)
 		{
 			//Create remote address
 			sockaddr_in address;
-			std::memset(&address, 0, sizeof(address)); //clear out memory for addr (same idea as zeromemory)
+			memset(&address, 0, sizeof(address)); //clear out memory for addr (same idea as zeromemory)
 			address.sin_addr.s_addr = htonl(ipAddress.ToInteger());
 			address.sin_family = AF_INET;
 			address.sin_port = htons(port);
@@ -51,15 +59,30 @@ namespace PNet
 
 				connect(GetHandle(), reinterpret_cast<sockaddr*>(&address), sizeof(address));
 
-				select(0, NULL, &writefds, &exceptfds, &timeOut);
+				select(GetHandle()+1, NULL, &writefds, &exceptfds, &timeOut);
 
 				if (FD_ISSET(GetHandle(), &exceptfds)) //Did exceptional condition occur?
 				{
-					int winsockError = 0;
-					int size = sizeof(int);
-					if (getsockopt(GetHandle(), SOL_SOCKET, SO_ERROR, (char*)&winsockError, &size) == 0)
+                    int socketError = 0;
+					#ifdef _WIN32
+					int size = sizeof(socketError);
+					#else
+					socklen_t size = sizeof(socketError);
+					#endif
+
+					if (getsockopt(GetHandle(), SOL_SOCKET, SO_ERROR, (char*)&socketError, &size) == 0)
 					{
-						return PRESULT::SOCKET_WSALASTERRORNOTSETUP;
+                        #ifdef WIN32
+                        return PRESULT::SOCKET_WSALASTERRORNOTSETUP;
+                        #else
+
+                        std::cerr << "SOCKET ERROR: " << errno << std::endl;
+                        std::cerr << "GETSOCKOPT ERROR: " << socketError << std::endl;
+                        return PRESULT::SOCKET_WSALASTERRORNOTSETUP;
+
+                        #endif
+
+
 					}
 					else
 					{
@@ -79,7 +102,7 @@ namespace PNet
 		{
 			//Create remote address
 			sockaddr_in6 address;
-			std::memset(&address, 0, sizeof(address)); //clear out memory for addr (same idea as zeromemory)
+			memset(&address, 0, sizeof(address)); //clear out memory for addr (same idea as zeromemory)
 			address.sin6_addr = ipAddress.ToIPV6Addr();
 			address.sin6_family = AF_INET6;
 			address.sin6_port = htons(port);
@@ -101,13 +124,17 @@ namespace PNet
 
 				connect(GetHandle(), reinterpret_cast<sockaddr*>(&address), sizeof(address));
 
-				select(0, NULL, &writefds, &exceptfds, &timeOut);
+				select(GetHandle()+1, NULL, &writefds, &exceptfds, &timeOut);
 
 				if (FD_ISSET(GetHandle(), &exceptfds)) //Did exceptional condition occur?
 				{
-					int winsockError = 0;
-					int size = sizeof(int);
-					if (getsockopt(GetHandle(), SOL_SOCKET, SO_ERROR, (char*)&winsockError, &size) == 0)
+					int socketError = 0;
+					#ifdef _WIN32
+					int size = sizeof(socketError);
+					#else
+					socklen_t size = sizeof(socketError);
+					#endif
+					if (getsockopt(GetHandle(), SOL_SOCKET, SO_ERROR, (char*)&socketError, &size) == 0)
 					{
 						return PRESULT::SOCKET_WSALASTERRORNOTSETUP;
 					}

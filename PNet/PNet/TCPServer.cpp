@@ -26,11 +26,12 @@ namespace PNet
 		auto result = listener->Listen(listen_port);
 		if (result != PRESULT::SUCCESS)
 			return result;
+        max_fd = listener->GetHandle() + 1;
 		FD_SET(listener->GetHandle(), &master);
 		return PRESULT::SUCCESS;
 	}
 
-	void TCPServer::Loop(const timeval timeout)
+	void TCPServer::Loop(timeval timeout)
 	{
 		if (listener == nullptr)
 		{
@@ -41,22 +42,40 @@ namespace PNet
 		fd_set readfds = master;
 		fd_set writefds = master;
 		fd_set exceptfds = master;
-		
-		select(0, &readfds, &writefds, &exceptfds, &timeout);
+
+        #ifdef _WIN32
+        select(0, &readfds, &writefds, &exceptfds, &timeout);
+        #else
+        select(max_fd, &readfds, &writefds, &exceptfds, &timeout);
+        #endif
+
 
 		if (connections.size() < connections.capacity())
 		{
 			if (FD_ISSET(listener->GetHandle(), &exceptfds))
 			{
 				//PrintExceptionalCondition(listener->GetHandle());
-				std::cout << "Winsock Error occurred on listenSocket." << std::endl;
+				#ifdef _WIN32
+				std::cout << "Winsock Error [" << WSAGetLastError() << "] occurred on listenSocket." << std::endl;
+				#else
+				if (errno != EAGAIN)
+				{
+                    std::cout << "Socket Error [" << errno << "] occurred on listenSocket." << std::endl;
+				}
+				#endif
 			}
 
 			if (FD_ISSET(listener->GetHandle(), &readfds)) //if listenSocket was in readfds
 			{
-				SOCKET accept_socket_handle = accept(listener->GetHandle(), NULL, NULL);
+				SocketHandle accept_socket_handle = accept(listener->GetHandle(), NULL, NULL);
 				if (accept_socket_handle != INVALID_SOCKET_CONST) //If new connection was properly accepted
 				{
+                    #ifndef _WIN32
+                    if (accept_socket_handle >= max_fd)
+                    {
+                        max_fd = accept_socket_handle + 1;
+                    }
+                    #endif
 					TCPConnection new_connection(this->ip_protocol, accept_socket_handle, true);
 					connections.emplace_back(new_connection);
 					FD_SET(new_connection.GetHandle(), &master);
@@ -78,6 +97,16 @@ namespace PNet
 				FD_CLR(connections[i].GetHandle(), &master);
 				connections[i].Disconnect();
 				connections.erase(connections.begin() + i);
+				#ifndef _WIN32
+				max_fd = listener->GetHandle() + 1;
+				for(int z=0; z<connections.size(); z++)
+				{
+                    if (connections[z].GetHandle()>=max_fd)
+                    {
+                        max_fd = connections[z].GetHandle()+1;
+                    }
+				}
+				#endif
 				continue;
 			}
 
@@ -96,6 +125,7 @@ namespace PNet
 
 				if (retval == SOCKET_ERROR)
 				{
+                    #ifdef _WIN32
 					if (WSAGetLastError() != WSAEWOULDBLOCK)
 					{
 						std::cout << "TCPServer Lost connection to " << connections[i].GetHandle() << " --- Reason: " << WSAGetLastError() << std::endl;
@@ -104,6 +134,26 @@ namespace PNet
 						connections.erase(connections.begin() + i);
 						continue;
 					}
+					#else
+					if (errno != EWOULDBLOCK && errno != EAGAIN)
+					{
+						std::cout << "TCPServer Lost connection to " << connections[i].GetHandle() << " --- Reason: " << errno << std::endl;
+						FD_CLR(connections[i].GetHandle(), &master);
+						connections[i].Disconnect();
+						connections.erase(connections.begin() + i);
+						#ifndef _WIN32
+                        max_fd = listener->GetHandle() + 1;
+                        for(int z=0; z<connections.size(); z++)
+                        {
+                            if (connections[z].GetHandle()>=max_fd)
+                            {
+                                max_fd = connections[z].GetHandle()+1;
+                            }
+                        }
+                        #endif
+						continue;
+					}
+					#endif
 				}
 				if (retval == 0)
 				{
@@ -111,6 +161,16 @@ namespace PNet
 					FD_CLR(connections[i].GetHandle(), &master);
 					connections[i].Disconnect();
 					connections.erase(connections.begin() + i);
+					#ifndef _WIN32
+                    max_fd = listener->GetHandle() + 1;
+                    for(int z=0; z<connections.size(); z++)
+                    {
+                        if (connections[z].GetHandle()>=max_fd)
+                        {
+                            max_fd = connections[z].GetHandle()+1;
+                        }
+                    }
+                    #endif
 					continue;
 				}
 				if (retval > 0)
@@ -121,7 +181,8 @@ namespace PNet
 					{
 						if (connections[i].incoming_bytes_received == sizeof(uint32_t)) //If full packet size received
 						{
-							ZeroMemory(connections[i].buffer, connections[i].incoming_packet_length);
+                            memset(connections[i].buffer, 0, connections[i].incoming_packet_length);
+							//ZeroMemory(connections[i].buffer, connections[i].incoming_packet_length);
 							connections[i].incoming_bytes_received = 0;
 							connections[i].incoming_packet_task = PacketRetrievalTask::ReceivingPacketBuffer;
 						}
@@ -242,7 +303,11 @@ namespace PNet
 	void TCPServer::PrintExceptionalCondition(const SocketHandle socket)
 	{
 		int errorcode = 0;
+		#ifdef _WIN32
 		int errorcodesize = sizeof(errorcode);
+		#else
+		socklen_t errorcodesize = sizeof(errorcode);
+		#endif
 		if (getsockopt(socket, SOL_SOCKET, SO_ERROR, (char*)&errorcode, &errorcodesize) == 0)
 		{
 			std::cout << "Winsock Error: " << errorcode << "." << std::endl;

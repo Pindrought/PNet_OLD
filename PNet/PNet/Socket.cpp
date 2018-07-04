@@ -1,6 +1,11 @@
 #include "Socket.h"
 #include <iostream>
+#ifdef _WIN32
 #include <ws2ipdef.h>
+#else
+#include <unistd.h>
+ #include <sys/ioctl.h>
+#endif
 
 namespace PNet
 {
@@ -8,7 +13,7 @@ namespace PNet
 	{
 		if (type != SocketType::TCP)
 		{
-			throw std::exception("ONLY TCP IS CURRENTLY SUPPORTED");
+			throw std::runtime_error("ONLY TCP IS CURRENTLY SUPPORTED");
 		}
 		this->type = type;
 		this->connectionType = connectionType;
@@ -90,7 +95,11 @@ namespace PNet
 	{
 		if (handle == INVALID_SOCKET_CONST)
 			return PRESULT::SOCKET_CLOSEUNINITIALIZEDSOCKET;
+        #ifdef _WIN32
 		int result = closesocket(handle);
+		#else
+		int result = close(handle);
+		#endif
 		if (result == 0)
 		{
 			return PRESULT::SUCCESS;
@@ -107,7 +116,11 @@ namespace PNet
 	PRESULT	Socket::SetBlocking(bool isBlocking)
 	{
 		u_long blocking = isBlocking ? 0 : 1;
+		#ifdef _WIN32
 		int result = ioctlsocket(handle, FIONBIO, &blocking);
+		#else
+		int result = ioctl(handle, FIONBIO, &blocking);
+		#endif
 		if (result != 0)
 		{
 			return PRESULT::SOCKET_WSALASTERRORNOTSETUP;
@@ -125,13 +138,14 @@ namespace PNet
 	}
 
 
-
+#ifdef _WIN32
 	namespace priv
 	{
 		struct SocketInitializer
 		{
 			SocketInitializer()
 			{
+
 				WSADATA init;
 				if (WSAStartup(MAKEWORD(2, 2), &init) != 0)
 				{
@@ -141,6 +155,7 @@ namespace PNet
 				{
 					std::cout << "WSA Startup looks fine." << std::endl;
 				}
+
 			}
 
 			~SocketInitializer()
@@ -151,4 +166,5 @@ namespace PNet
 
 		SocketInitializer globalInitializer;
 	}
+#endif
 }

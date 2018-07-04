@@ -54,10 +54,12 @@ namespace PNet
 				// The broadcast address needs to be handled explicitly,
 				// because it is also the value returned by inet_addr on error
 				this->address = INADDR_BROADCAST;
+				isValid = true;
 			}
 			else if (address == "0.0.0.0")
 			{
 				this->address = INADDR_ANY;
+				isValid = true;
 			}
 			else
 			{
@@ -68,12 +70,13 @@ namespace PNet
 				if (ip != INADDR_NONE)
 				{
 					this->address = ip;
+					isValid = true;
 				}
 				else
 				{
 					// Not a valid address, try to convert it as a host name
 					addrinfo hints;
-					std::memset(&hints, 0, sizeof(hints));
+					memset(&hints, 0, sizeof(hints));
 					hints.ai_family = AF_INET;
 					addrinfo* result = NULL;
 					if (getaddrinfo(address.c_str(), NULL, &hints, &result) == 0)
@@ -83,6 +86,7 @@ namespace PNet
 							ip = reinterpret_cast<sockaddr_in*>(result->ai_addr)->sin_addr.s_addr;
 							freeaddrinfo(result);
 							this->address = ip;
+							isValid = true;
 						}
 						else
 						{
@@ -104,11 +108,19 @@ namespace PNet
 			{
 				std::cerr << "Failed to convert IPV6 IP: " << address << std::endl;
 			}
-			this->ipv6addr = ip;
+			else
+			{
+                this->ipv6addr = ip;
+                isValid = true;
+			}
 		}
 		else
 		{
-			throw std::exception("IPAddress protocol is not IPV4 or IPV6. Something went wrong.");
+			throw std::runtime_error("IPAddress protocol is not IPV4 or IPV6. Something went wrong.");
 		}
+	}
+	bool IPAddress::IsValid()
+	{
+        return isValid;
 	}
 }

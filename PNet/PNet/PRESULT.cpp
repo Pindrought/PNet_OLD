@@ -18,7 +18,7 @@ namespace PNet
 			return "Error occurred - Attempted to close uninitialized socket.";
 		case PRESULT::SOCKET_WSALASTERRORNOTSETUP:
 			return "This isn't set up currently. TODO...";
-		
+
 		case PRESULT::SOCKET_FAILEDSETTCPNODELAY:
 			return "Failed to set TCP No Delay on socket to prevent buffering.";
 		case PRESULT::SOCKET_FAILEDENABLEBROADCAST:
@@ -27,6 +27,8 @@ namespace PNet
 			return "Winsock error occured and getsockopt() failed to retrieve the error code.";
 		case PRESULT::TCPSOCKET_ConnectionFailed:
 			return "TCP Socket failed to connect.";
+        case PRESULT::TCPSOCKET_INVALIDIP:
+			return "Invalid IP Address entered for selected IP version.";
 		case PRESULT::TCPLISTENER_UNABLE_TO_BIND_SOCKET:
 			return "TCP Listener unable to bind listening socket.";
 		case PRESULT::SUCCESS:

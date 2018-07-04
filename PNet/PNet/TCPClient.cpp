@@ -7,7 +7,7 @@ namespace PNet
 		:TCPConnection(connectionType, socketHandle, isConnected)
 	{
 	}
-	void TCPClient::Loop(const timeval timeout)
+	void TCPClient::Loop(timeval timeout)
 	{
 		if (IsConnected() == false)
 		{
@@ -18,9 +18,9 @@ namespace PNet
 		fd_set writefds = master;
 		fd_set exceptfds = master;
 
-		select(0, &readfds, &writefds, &exceptfds, &timeout);
+		select(this->GetHandle()+1, &readfds, &writefds, &exceptfds, &timeout);
 
-		
+
 		if (FD_ISSET(this->GetHandle(), &exceptfds))
 		{
 			//PrintExceptionalCondition(connections[i].socket);
@@ -45,6 +45,7 @@ namespace PNet
 
 			if (retval == SOCKET_ERROR)
 			{
+                #ifdef _WIN32
 				if (WSAGetLastError() != WSAEWOULDBLOCK)
 				{
 					std::cout << "Lost connection to " << this->GetHandle() << " --- Reason: " << WSAGetLastError() << std::endl;
@@ -52,6 +53,15 @@ namespace PNet
 					this->Disconnect();
 					return;
 				}
+				#else
+				if (errno != EWOULDBLOCK)
+				{
+					std::cout << "Lost connection to " << this->GetHandle() << " --- Reason: " << errno << std::endl;
+					FD_CLR(this->GetHandle(), &master);
+					this->Disconnect();
+					return;
+				}
+				#endif
 			}
 			if (retval == 0)
 			{
@@ -68,7 +78,8 @@ namespace PNet
 				{
 					if (this->incoming_bytes_received == sizeof(int32_t)) //If full packet size received
 					{
-						ZeroMemory(this->buffer, this->incoming_packet_length);
+                        memset(this->buffer, 0, this->incoming_packet_length);
+						//ZeroMemory(this->buffer, this->incoming_packet_length);
 						this->incoming_bytes_received = 0;
 						this->incoming_packet_task = PacketRetrievalTask::ReceivingPacketBuffer;
 					}

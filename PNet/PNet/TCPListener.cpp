@@ -8,7 +8,7 @@ namespace PNet
 	{
 	}
 
-	
+
 	PRESULT TCPListener::Listen(unsigned short port)
 	{
 
@@ -20,12 +20,12 @@ namespace PNet
 
 		if (this->GetIPProtocol() == ConnectionType::IPV4)
 		{
-			SOCKADDR_IN listener_info;
+			sockaddr_in listener_info;
 			listener_info.sin_family = AF_INET;
 			listener_info.sin_addr.s_addr = INADDR_ANY; //anyone can connect (don't loopback to self)
 			listener_info.sin_port = htons(port);
 
-			if (bind(this->GetHandle(), (SOCKADDR*)(&listener_info), sizeof(listener_info)) == SOCKET_ERROR) //bind socket (required before listening)
+			if (bind(this->GetHandle(), (sockaddr*)(&listener_info), sizeof(listener_info)) == SOCKET_ERROR) //bind socket (required before listening)
 			{
 				return PRESULT::TCPLISTENER_UNABLE_TO_BIND_SOCKET;
 			}
@@ -39,9 +39,13 @@ namespace PNet
 			server_addr.sin6_addr = in6addr_any;
 			server_addr.sin6_port = htons(port);
 
-			if (bind(this->GetHandle(), (SOCKADDR*)&server_addr, sizeof(server_addr)) == SOCKET_ERROR)
+			if (bind(this->GetHandle(), (sockaddr*)&server_addr, sizeof(server_addr)) == SOCKET_ERROR)
 			{
+                #ifdef _WIN32
 				std::cerr << "Bind failed with error code: " << WSAGetLastError() << std::endl;
+				#else
+				std::cerr << "Bind failed with error code: " << errno << std::endl;
+				#endif
 				std::cerr << "Handle: " << this->GetHandle() << std::endl;
 				return PRESULT::TCPLISTENER_UNABLE_TO_BIND_SOCKET;
 			}

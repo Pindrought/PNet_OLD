@@ -1,6 +1,10 @@
 #include "Packet.h"
 #include <cstdint> //Required to use std::std::int32_t
+#ifdef _WIN32
 #include <WinSock2.h> //for htonl/htons
+#else
+#include <arpa/inet.h> //for htonl/htons
+#endif
 
 namespace PNet
 {

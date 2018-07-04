@@ -8,10 +8,10 @@ namespace PNet
 {
 	class TCPServer
 	{
-	public: 
+	public:
 		TCPServer(ConnectionType ip_protocol = ConnectionType::IPV4, unsigned short listen_port = 8888);
 		PRESULT StartListener();
-		void Loop(const timeval timeout = { 0,0 });
+		void Loop(timeval timeout = { 0,0 });
 		virtual void ProcessPackets();
 		~TCPServer();
 	private:
@@ -22,6 +22,9 @@ namespace PNet
 		fd_set master;
 
 		void PrintExceptionalCondition(const SocketHandle socket);
+		#ifndef _WIN32
+		SocketHandle max_fd = 0;
+		#endif
 
 	};
 }

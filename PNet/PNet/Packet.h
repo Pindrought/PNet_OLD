@@ -6,6 +6,7 @@
 #include "PacketException.h"
 #include "PacketType.h"
 
+
 #define MAX_PACKET_SIZE 8192 //Maximum packet size, can be changed to whatever - If a connection tries to send packet > MAX_PACKET_SIZE, the connection will be forcefully closed
 
 namespace PNet
@@ -34,24 +35,24 @@ namespace PNet
 
 		int32_t size = 0;
 
-		Packet& Packet::operator << (PacketType packetType);
-		Packet& Packet::operator << (std::shared_ptr<Packet> packet);
-		Packet& Packet::operator << (std::string data);
-		Packet& Packet::operator << (uint32_t data);
-		Packet& Packet::operator << (uint16_t data);
-		Packet& Packet::operator << (uint8_t data);
-		Packet& Packet::operator << (int32_t data);
-		Packet& Packet::operator << (int16_t data);
-		Packet& Packet::operator << (int8_t data);
+		Packet& operator << (PacketType packetType);
+		Packet& operator << (std::shared_ptr<Packet> packet);
+		Packet& operator << (std::string data);
+		Packet& operator << (uint32_t data);
+		Packet& operator << (uint16_t data);
+		Packet& operator << (uint8_t data);
+		Packet& operator << (int32_t data);
+		Packet& operator << (int16_t data);
+		Packet& operator << (int8_t data);
 
-		Packet& Packet::operator >> (PacketType & packetType);
-		Packet& Packet::operator >> (std::string & data);
-		Packet& Packet::operator >> (uint32_t & data);
-		Packet& Packet::operator >> (uint16_t & data);
-		Packet& Packet::operator >> (uint8_t & data);
-		Packet& Packet::operator >> (int32_t & data);
-		Packet& Packet::operator >> (int16_t & data);
-		Packet& Packet::operator >> (int8_t & data);
+		Packet& operator >> (PacketType & packetType);
+		Packet& operator >> (std::string & data);
+		Packet& operator >> (uint32_t & data);
+		Packet& operator >> (uint16_t & data);
+		Packet& operator >> (uint8_t & data);
+		Packet& operator >> (int32_t & data);
+		Packet& operator >> (int16_t & data);
+		Packet& operator >> (int8_t & data);
 	private:
 		int extractionOffset = 0;
 	};
