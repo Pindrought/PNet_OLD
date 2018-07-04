@@ -15,11 +15,11 @@ int serverthread()
 {
     Timer t;
     t.Start();
-	TCPServer server(ConnectionType::IPV6);
+	TCPServer server(ConnectionType::IPV4);
 	auto result = server.StartListener();
 	if (result == PRESULT::SUCCESS)
 	{
-		while (t.GetMilisecondsElapsed() < 5000) //server ends after 5 seconds
+		while (t.GetMilisecondsElapsed() < 3000) //server ends after 5 seconds
 		{
 			server.Loop(timeout); //accept connections / process messages / do stuff with timeout up to "timeout"
 		}
