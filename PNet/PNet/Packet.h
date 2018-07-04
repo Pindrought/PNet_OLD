@@ -31,6 +31,7 @@ namespace PNet
 		Packet(const std::shared_ptr<Packet> p);
 		Packet(const char * buffer, const int size); //assumes first 4 bytes of buffer contain packet size
 		void Append(const char * buffer, const int size); //Will append buffer to packet of "size" bytes
+		void FlagForQueue(); //flags message as queue'd - user should never call this as packet manager/tcpclient/server do this
 		std::vector<int8_t> buffer; //Packet Buffer
 
 		int32_t size = 0;
@@ -55,5 +56,6 @@ namespace PNet
 		Packet& operator >> (int8_t & data);
 	private:
 		int extractionOffset = 0;
+		bool flaggedForQueue = false;
 	};
 }

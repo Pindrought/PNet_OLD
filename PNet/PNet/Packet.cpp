@@ -30,8 +30,17 @@ namespace PNet
 
 	void Packet::Append(const char * dataBuffer, const int size)
 	{
+		if (flaggedForQueue)
+		{
+			throw PacketException("[Packet::Append(const char * dataBuffer, const int size)] - Operation was called after packet was flagged for queue. No operations should be performed on packet after it is flagged for queue.");
+		}
 		buffer.insert(buffer.end(), dataBuffer, dataBuffer + size);
 		this->size += size;
+	}
+
+	void Packet::FlagForQueue()
+	{
+		flaggedForQueue = true;
 	}
 
 	Packet& Packet::operator <<(PacketType packetType)
@@ -97,6 +106,10 @@ namespace PNet
 
 	Packet& Packet::operator >> (PacketType & packetType)
 	{
+		if (flaggedForQueue)
+		{
+			throw PacketException("[Packet::operator >> (PacketType & packetType)] - Operation was called after packet was flagged for queue. No operations should be performed on packet after it is flagged for queue.");
+		}
 		if (extractionOffset + sizeof(uint32_t) > buffer.size())
 			throw PacketException("[Packet::operator >>(PacketType & data)] - Extraction offset exceeded buffer size.");
 		uint32_t data = 0;
@@ -107,6 +120,10 @@ namespace PNet
 
 	Packet& Packet::operator >> (std::string & data)
 	{
+		if (flaggedForQueue)
+		{
+			throw PacketException("[Packet::operator >> (std::string & data)] - Operation was called after packet was flagged for queue. No operations should be performed on packet after it is flagged for queue.");
+		}
 		uint32_t len = 0;
 		*this >> len;
 
@@ -123,6 +140,10 @@ namespace PNet
 
 	Packet& Packet::operator >>(uint32_t & data)
 	{
+		if (flaggedForQueue)
+		{
+			throw PacketException("[Packet::operator >>(uint32_t & data)] - Operation was called after packet was flagged for queue. No operations should be performed on packet after it is flagged for queue.");
+		}
 		if (extractionOffset + sizeof(uint32_t) > buffer.size())
 			throw PacketException("[Packet::operator >>(uint32_t & data)] - Extraction offset exceeded buffer size.");
 		data = *reinterpret_cast<const uint32_t*>(&buffer[extractionOffset]);
@@ -133,6 +154,10 @@ namespace PNet
 
 	Packet& Packet::operator >> (uint16_t & data)
 	{
+		if (flaggedForQueue)
+		{
+			throw PacketException("[Packet::operator >> (uint16_t & data)] - Operation was called after packet was flagged for queue. No operations should be performed on packet after it is flagged for queue.");
+		}
 		if (extractionOffset + sizeof(uint16_t) > buffer.size())
 			throw PacketException("[Packet::operator >> (uint16_t & data)] - Extraction offset exceeded buffer size.");
 		data = *reinterpret_cast<const uint16_t*>(&buffer[extractionOffset]);
@@ -143,6 +168,10 @@ namespace PNet
 
 	Packet& Packet::operator >> (uint8_t & data)
 	{
+		if (flaggedForQueue)
+		{
+			throw PacketException("[Packet::operator >> (uint8_t & data)] - Operation was called after packet was flagged for queue. No operations should be performed on packet after it is flagged for queue.");
+		}
 		if (extractionOffset + sizeof(uint8_t) > buffer.size())
 			throw PacketException("[Packet::operator >> (uint8_t & data)] - Extraction offset exceeded buffer size.");
 		data = *reinterpret_cast<const uint8_t*>(&buffer[extractionOffset]);
@@ -152,6 +181,10 @@ namespace PNet
 
 	Packet& Packet::operator >> (int32_t & data)
 	{
+		if (flaggedForQueue)
+		{
+			throw PacketException("[Packet::operator >> (int32_t & data)] - Operation was called after packet was flagged for queue. No operations should be performed on packet after it is flagged for queue.");
+		}
 		if (extractionOffset + sizeof(int32_t) > buffer.size())
 			throw PacketException("[Packet::operator >> (int32_t & data)] - Extraction offset exceeded buffer size.");
 		data = *reinterpret_cast<const int32_t*>(&buffer[extractionOffset]);
@@ -161,6 +194,10 @@ namespace PNet
 
 	Packet& Packet::operator >> (int16_t & data)
 	{
+		if (flaggedForQueue)
+		{
+			throw PacketException("[Packet::operator >> (int16_t & data)] - Operation was called after packet was flagged for queue. No operations should be performed on packet after it is flagged for queue.");
+		}
 		if (extractionOffset + sizeof(int16_t) > buffer.size())
 			throw PacketException("[Packet::operator >> (int16_t & data)] - Extraction offset exceeded buffer size.");
 		data = *reinterpret_cast<const int16_t*>(&buffer[extractionOffset]);
@@ -170,6 +207,10 @@ namespace PNet
 
 	Packet& Packet::operator >> (int8_t & data)
 	{
+		if (flaggedForQueue)
+		{
+			throw PacketException("[Packet::operator >> (int8_t & data)] - Operation was called after packet was flagged for queue. No operations should be performed on packet after it is flagged for queue.");
+		}
 		if (extractionOffset + sizeof(int8_t) > buffer.size())
 			throw PacketException("[Packet::operator >> (int8_t & data)] - Extraction offset exceeded buffer size.");
 		data = *reinterpret_cast<const int8_t*>(&buffer[extractionOffset]);

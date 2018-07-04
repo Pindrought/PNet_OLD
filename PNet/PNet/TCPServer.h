@@ -13,6 +13,7 @@ namespace PNet
 		PRESULT StartListener();
 		void Loop(timeval timeout = { 0,0 });
 		virtual void ProcessPackets();
+		void SendPacket(TCPConnection & connection, std::shared_ptr<Packet> packet);
 		~TCPServer();
 	private:
 		IPVersion ipversion;

@@ -16,8 +16,12 @@
 
 namespace PNet
 {
+#ifndef INVALID_SOCKET
     #define INVALID_SOCKET  ((SocketHandle)(~0))
+#endif
+#ifndef SOCKET_ERROR
     #define SOCKET_ERROR    (-1)
+#endif
 	const SocketHandle INVALID_SOCKET_CONST = INVALID_SOCKET;
 
 	class Socket

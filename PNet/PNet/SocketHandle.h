@@ -3,7 +3,12 @@
 namespace PNet
 {
 #if defined _WIN32
-	typedef unsigned int SocketHandle;
+	#if  defined(_WIN64)
+		typedef unsigned __int64 UINT_PTR;
+	#else 
+		typedef unsigned int UINT_PTR;
+	#endif 
+	typedef UINT_PTR SocketHandle;
 #else
 	typedef int SocketHandle;
 #endif

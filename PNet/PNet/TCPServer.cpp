@@ -287,6 +287,12 @@ namespace PNet
 		}
 	}
 
+	void TCPServer::SendPacket(TCPConnection & connection, std::shared_ptr<Packet> packet)
+	{
+		packet->FlagForQueue();
+		connection.outgoing_pm.Append(packet);
+	}
+
 	TCPServer::~TCPServer()
 	{
 		if (listener != nullptr)

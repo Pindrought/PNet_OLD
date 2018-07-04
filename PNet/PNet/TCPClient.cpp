@@ -162,6 +162,7 @@ namespace PNet
 
 	void TCPClient::SendPacket(std::shared_ptr<Packet> p)
 	{
+		p->FlagForQueue();
 		this->outgoing_pm.Append(p);
 	}
 
