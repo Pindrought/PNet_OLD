@@ -17,7 +17,7 @@ add_executable(PNetOut 	Source.cpp
 			PNet/PRESULT.h PNet/PRESULT.cpp
 			PNet/Socket.h PNet/Socket.cpp
 			PNet/SocketHandle.h
-			PNet/SocketType.h
+			PNet/IPProtocol.h
 			PNet/TCPClient.h PNet/TCPClient.cpp
 			PNet/TCPConnection.h PNet/TCPConnection.cpp
 			PNet/TCPListener.h PNet/TCPListener.cpp
