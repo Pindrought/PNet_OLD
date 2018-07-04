@@ -4,6 +4,6 @@
 
 namespace PNet
 {
-	const unsigned long build = 1; //2018-07-0
+	const unsigned long build = 2; //2018-07-04
 }
 
