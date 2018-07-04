@@ -26,7 +26,9 @@ namespace PNet
 		auto result = listener->Listen(listen_port);
 		if (result != PRESULT::SUCCESS)
 			return result;
-        max_fd = listener->GetHandle() + 1;
+		#ifndef _WIN32
+		max_fd = listener->GetHandle() + 1;
+		#endif
 		FD_SET(listener->GetHandle(), &master);
 		return PRESULT::SUCCESS;
 	}

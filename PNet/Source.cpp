@@ -2,7 +2,10 @@
 #include <iostream>
 #include <thread>
 #include "Timer.h"
+#ifndef _WIN32 //Linux Sleep that functions like win32 sleep
+#define Sleep(duration) sleep(duration/1000)
 #include <unistd.h>
+#endif
 
 using namespace PNet;
 
@@ -16,7 +19,7 @@ int serverthread()
 	auto result = server.StartListener();
 	if (result == PRESULT::SUCCESS)
 	{
-		while (t.GetMilisecondsElapsed() < 5000) //server ends after 20 seconds
+		while (t.GetMilisecondsElapsed() < 5000) //server ends after 5 seconds
 		{
 			server.Loop(timeout); //accept connections / process messages / do stuff with timeout up to "timeout"
 		}
@@ -31,10 +34,10 @@ int serverthread()
 int main()
 {
 	std::thread st(serverthread);
-	usleep(500000); //500 miliseconds (half a second)
+	Sleep(500); //500 miliseconds (half a second)
 
 	TCPClient myConn(ConnectionType::IPV4); //Create IPV4 Client
-	auto result = myConn.Connect(IPAddress("::1", ConnectionType::IPV4), 8888, timeout); //Connect ipv6 client to localhost 127.0.0.1 on port 8888 with a timeout up to "timeout"
+	auto result = myConn.Connect(IPAddress("127.0.0.1", ConnectionType::IPV4), 8888, timeout); //Connect ipv6 client to localhost 127.0.0.1 on port 8888 with a timeout up to "timeout"
 	if (myConn.IsConnected())
 	{
 		std::cout << "Connected!" << std::endl;
