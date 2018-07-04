@@ -6,6 +6,7 @@
 #define Sleep(duration) sleep(duration/1000)
 #include <unistd.h>
 #endif
+#include "IsEscapePressed.h" //rigged up win32/linux compatible way of checking if escape is pressed to terminate server early
 
 using namespace PNet;
 
@@ -19,7 +20,7 @@ int serverthread()
 	auto result = server.StartListener();
 	if (result == PRESULT::SUCCESS)
 	{
-		while (t.GetMilisecondsElapsed() < 3000) //server ends after 5 seconds
+		while (IsEscapePressed() == false) //server ends on tick if escape is pressed
 		{
 			server.Loop(timeout); //accept connections / process messages / do stuff with timeout up to "timeout"
 		}

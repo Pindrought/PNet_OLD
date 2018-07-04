@@ -56,16 +56,16 @@ namespace PNet
 				{
 					return PRESULT::SOCKET_FAILEDSETTCPNODELAY;
 				}
+				//set socket to reuse address
+				int flag = 1;
+				if (setsockopt(handle, SOL_SOCKET, SO_REUSEADDR, (char*)&flag, sizeof(flag)) == SOCKET_ERROR)
+				{
+					std::cerr << "Failed to set socket to reuse address." << std::endl;
+				}
 				if (this->connectionType == ConnectionType::IPV6)
 				{
 					if (isListener)
 					{
-						//set socket to reuse address
-						int flag = 1;
-						if (setsockopt(handle, SOL_SOCKET, SO_REUSEADDR, (char*)&flag, sizeof(flag)) == SOCKET_ERROR)
-						{
-							std::cerr << "Failed to set socket to reuse address." << std::endl;
-						}
 						int no = 0;
 						if (setsockopt(handle, IPPROTO_IPV6, IPV6_V6ONLY, (char *)&no, sizeof(no)) == SOCKET_ERROR)
 						{

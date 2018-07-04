@@ -6,6 +6,7 @@ include_directories(PNet)
 FIND_PACKAGE ( Threads REQUIRED )
 add_executable(PNetOut 	Source.cpp 
 			Timer.h Timer.cpp
+			IsEscapePressed.h IsEscapePressed.cpp
 			PNet/Include.h
 			PNet/ConnectionType.h 
 			PNet/IPAddress.h PNet/IPAddress.cpp

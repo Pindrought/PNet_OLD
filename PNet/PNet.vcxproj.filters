@@ -57,6 +57,9 @@
     <ClCompile Include="Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="IsEscapePressed.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PNet\Socket.h">
@@ -108,6 +111,9 @@
       <Filter>Header Files\PNet</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IsEscapePressed.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="IsEscapePressed.cpp" />
     <ClCompile Include="PNet\PacketManager.cpp" />
     <ClCompile Include="PNet\IPAddress.cpp" />
     <ClCompile Include="PNet\Packet.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="PNet\TCPListener.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="IsEscapePressed.h" />
     <ClInclude Include="PNet\PacketManager.h" />
     <ClInclude Include="PNet\ConnectionType.h" />
     <ClInclude Include="PNet\Include.h" />
