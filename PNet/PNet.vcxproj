@@ -163,7 +163,7 @@
   <ItemGroup>
     <ClInclude Include="IsEscapePressed.h" />
     <ClInclude Include="PNet\PacketManager.h" />
-    <ClInclude Include="PNet\ConnectionType.h" />
+    <ClInclude Include="PNet\IPVersion.h" />
     <ClInclude Include="PNet\Include.h" />
     <ClInclude Include="PNet\IPAddress.h" />
     <ClInclude Include="PNet\Packet.h" />

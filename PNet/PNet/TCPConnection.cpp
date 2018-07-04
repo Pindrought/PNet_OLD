@@ -2,8 +2,8 @@
 
 namespace PNet
 {
-	TCPConnection::TCPConnection(ConnectionType connectionType, SocketHandle socketHandle, bool isConnected)
-		:TCPSocket(connectionType, socketHandle, isConnected)
+	TCPConnection::TCPConnection(IPVersion ipversion, SocketHandle socketHandle, bool isConnected)
+		:TCPSocket(ipversion, socketHandle, isConnected)
 	{
 
 	}

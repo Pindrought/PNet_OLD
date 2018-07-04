@@ -3,9 +3,9 @@
 
 namespace PNet
 {
-	IPAddress::IPAddress(std::string ip, ConnectionType protocol)
+	IPAddress::IPAddress(std::string ip, IPVersion protocol)
 	{
-		/*if (protocol == ConnectionType::IPV6)
+		/*if (protocol == IPVersion::IPV6)
 		{
 			throw std::exception("IPV6 not yet implemented.");
 		}*/
@@ -17,7 +17,7 @@ namespace PNet
 	{
 		std::string result;
 
-		if (this->protocol == ConnectionType::IPV4)
+		if (this->protocol == IPVersion::IPV4)
 		{
 			result.resize(INET_ADDRSTRLEN);
 			in_addr address;
@@ -47,7 +47,7 @@ namespace PNet
 	void IPAddress::resolve(const std::string& address)
 	{
 		this->address = 0;
-		if (this->protocol == ConnectionType::IPV4)
+		if (this->protocol == IPVersion::IPV4)
 		{
 			if (address == "255.255.255.255")
 			{
@@ -100,7 +100,7 @@ namespace PNet
 				}
 			}
 		}
-		else if (this->protocol == ConnectionType::IPV6)
+		else if (this->protocol == IPVersion::IPV6)
 		{
 			// Try to convert the address as a byte representation ("xxx.xxx.xxx.xxx")
 			in6_addr ip;

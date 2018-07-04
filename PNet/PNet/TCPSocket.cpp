@@ -3,14 +3,14 @@
 
 namespace PNet
 {
-	TCPSocket::TCPSocket(ConnectionType connectionType, SocketHandle socketHandle, bool isConnected)
-		:Socket(SocketType::TCP, connectionType, socketHandle)
+	TCPSocket::TCPSocket(IPVersion ipversion, SocketHandle socketHandle, bool isConnected)
+		:Socket(SocketType::TCP, ipversion, socketHandle)
 	{
-		/*if (connectionType == ConnectionType::IPV6)
+		/*if (IPVersion == IPVersion::IPV6)
 		{
 			throw std::exception("IPV6 Support not yet implemented.");
 		}*/
-		this->connectionType = connectionType;
+		this->ipversion = ipversion;
 		isConnected = isConnected;
 	}
 	PRESULT TCPSocket::Connect(IPAddress ipAddress, uint32_t port, timeval timeOut)
@@ -33,7 +33,7 @@ namespace PNet
             }
 		}
 
-		if (this->GetIPProtocol() == ConnectionType::IPV4)
+		if (this->GetIPVersion() == IPVersion::IPV4)
 		{
 			//Create remote address
 			sockaddr_in address;

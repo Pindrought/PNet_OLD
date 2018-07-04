@@ -9,14 +9,14 @@
 
 namespace PNet
 {
-	Socket::Socket(SocketType type, ConnectionType connectionType, SocketHandle handle)
+	Socket::Socket(SocketType type, IPVersion ipversion, SocketHandle handle)
 	{
 		if (type != SocketType::TCP)
 		{
 			throw std::runtime_error("ONLY TCP IS CURRENTLY SUPPORTED");
 		}
 		this->type = type;
-		this->connectionType = connectionType;
+		this->ipversion = ipversion;
 		this->handle = handle;
 	}
 	PRESULT Socket::Create(bool isListener)
@@ -28,7 +28,7 @@ namespace PNet
 
 		if (type == SocketType::TCP || type == SocketType::UDP)
 		{
-			if (this->connectionType == ConnectionType::IPV4)
+			if (this->ipversion == IPVersion::IPV4)
 			{
 				handle = socket(PF_INET, type == SocketType::TCP ? SOCK_STREAM : SOCK_DGRAM, type == SocketType::TCP ? IPPROTO_TCP : IPPROTO_UDP);
 			}
@@ -62,7 +62,7 @@ namespace PNet
 				{
 					std::cerr << "Failed to set socket to reuse address." << std::endl;
 				}
-				if (this->connectionType == ConnectionType::IPV6)
+				if (this->ipversion == IPVersion::IPV6)
 				{
 					if (isListener)
 					{
@@ -132,9 +132,9 @@ namespace PNet
 		return handle;
 	}
 
-	ConnectionType Socket::GetIPProtocol()
+	IPVersion Socket::GetIPVersion()
 	{
-		return connectionType;
+		return ipversion;
 	}
 
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ConnectionType.h"
+#include "IPVersion.h"
 #include <string>
 #ifdef _WIN32
 #include <WS2tcpip.h>
@@ -16,7 +16,7 @@ namespace PNet
 	class IPAddress
 	{
 	public:
-		IPAddress(std::string ip, ConnectionType protocol);
+		IPAddress(std::string ip, IPVersion protocol);
 		std::string ToString();
 		uint32_t ToInteger();
 		in6_addr ToIPV6Addr();
@@ -24,7 +24,7 @@ namespace PNet
 	private:
 		void resolve(const std::string & address);
 		uint32_t address;
-		ConnectionType protocol;
+		IPVersion protocol;
 		in6_addr ipv6addr;
 		bool isValid = false;
 	};

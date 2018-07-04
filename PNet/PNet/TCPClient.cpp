@@ -3,8 +3,8 @@
 
 namespace PNet
 {
-	TCPClient::TCPClient(ConnectionType connectionType, SocketHandle socketHandle, bool isConnected)
-		:TCPConnection(connectionType, socketHandle, isConnected)
+	TCPClient::TCPClient(IPVersion ipversion, SocketHandle socketHandle, bool isConnected)
+		:TCPConnection(ipversion, socketHandle, isConnected)
 	{
 	}
 	void TCPClient::Loop(timeval timeout)

@@ -10,7 +10,7 @@ namespace PNet
 	{
 		friend class TCPServer;
 	public:
-		TCPConnection(ConnectionType connectionType = ConnectionType::IPV4, SocketHandle socketHandle = INVALID_SOCKET_CONST, bool isConnected = false);
+		TCPConnection(IPVersion ipversion = IPVersion::IPV4, SocketHandle socketHandle = INVALID_SOCKET_CONST, bool isConnected = false);
 	protected:
 		PacketManager incoming_pm;
 		PacketManager outgoing_pm;

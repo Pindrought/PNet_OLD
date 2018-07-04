@@ -8,7 +8,7 @@ add_executable(PNetOut 	Source.cpp
 			Timer.h Timer.cpp
 			IsEscapePressed.h IsEscapePressed.cpp
 			PNet/Include.h
-			PNet/ConnectionType.h 
+			PNet/IPVersion.h 
 			PNet/IPAddress.h PNet/IPAddress.cpp
 			PNet/Packet.h PNet/Packet.cpp
 			PNet/PacketException.h

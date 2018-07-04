@@ -3,8 +3,8 @@
 
 namespace PNet
 {
-	TCPListener::TCPListener(ConnectionType connectionType)
-		:Socket(SocketType::TCP, connectionType, INVALID_SOCKET_CONST)
+	TCPListener::TCPListener(IPVersion ipversion)
+		:Socket(SocketType::TCP, ipversion, INVALID_SOCKET_CONST)
 	{
 	}
 
@@ -18,7 +18,7 @@ namespace PNet
 			return result;
 		}
 
-		if (this->GetIPProtocol() == ConnectionType::IPV4)
+		if (this->GetIPVersion() == IPVersion::IPV4)
 		{
 			sockaddr_in listener_info;
 			listener_info.sin_family = AF_INET;

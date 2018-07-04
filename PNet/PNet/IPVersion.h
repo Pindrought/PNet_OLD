@@ -1,7 +1,7 @@
 #pragma once
 namespace PNet
 {
-	enum ConnectionType
+	enum IPVersion
 	{
 		IPV4,
 		IPV6

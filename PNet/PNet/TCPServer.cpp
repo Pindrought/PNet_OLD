@@ -3,10 +3,10 @@
 
 namespace PNet
 {
-	TCPServer::TCPServer(ConnectionType ip_protocol, unsigned short listen_port)
-		:ip_protocol(ip_protocol), listen_port(listen_port)
+	TCPServer::TCPServer(IPVersion ipversion, unsigned short listen_port)
+		:ipversion(ipversion), listen_port(listen_port)
 	{
-		/*if (ip_protocol == ConnectionType::IPV6)
+		/*if (ipversion == IPVersion::IPV6)
 		{
 			throw std::exception("IPV6 not yet implemented.");
 		}*/
@@ -22,7 +22,7 @@ namespace PNet
 			listener->Close();
 			delete listener;
 		}
-		listener = new TCPListener(this->ip_protocol);
+		listener = new TCPListener(this->ipversion);
 		auto result = listener->Listen(listen_port);
 		if (result != PRESULT::SUCCESS)
 			return result;
@@ -78,7 +78,7 @@ namespace PNet
                         max_fd = accept_socket_handle + 1;
                     }
                     #endif
-					TCPConnection new_connection(this->ip_protocol, accept_socket_handle, true);
+					TCPConnection new_connection(this->ipversion, accept_socket_handle, true);
 					connections.emplace_back(new_connection);
 					FD_SET(new_connection.GetHandle(), &master);
 					std::cout << "New Connection: " << accept_socket_handle << std::endl;

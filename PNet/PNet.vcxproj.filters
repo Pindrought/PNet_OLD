@@ -74,9 +74,6 @@
     <ClInclude Include="PNet\SocketType.h">
       <Filter>Header Files\PNet</Filter>
     </ClInclude>
-    <ClInclude Include="PNet\ConnectionType.h">
-      <Filter>Header Files\PNet</Filter>
-    </ClInclude>
     <ClInclude Include="PNet\Include.h">
       <Filter>Header Files\PNet</Filter>
     </ClInclude>
@@ -115,6 +112,9 @@
     </ClInclude>
     <ClInclude Include="IsEscapePressed.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PNet\IPVersion.h">
+      <Filter>Header Files\PNet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

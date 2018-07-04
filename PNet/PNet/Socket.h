@@ -12,7 +12,7 @@
 #endif
 #include "SocketType.h"
 #include "PRESULT.h"
-#include "ConnectionType.h"
+#include "IPVersion.h"
 
 namespace PNet
 {
@@ -23,10 +23,10 @@ namespace PNet
 	class Socket
 	{
 	public:
-		Socket(SocketType type, ConnectionType connectionType = ConnectionType::IPV4, SocketHandle handle = INVALID_SOCKET_CONST);
+		Socket(SocketType type, IPVersion ipversion = IPVersion::IPV4, SocketHandle handle = INVALID_SOCKET_CONST);
 	public:
 		SocketHandle GetHandle();
-		ConnectionType GetIPProtocol();
+		IPVersion GetIPVersion();
 		PRESULT Close();
 	protected:
 		PRESULT Create(bool isListener = false);
@@ -34,7 +34,7 @@ namespace PNet
 		PRESULT SetBlocking(bool isBlocking);
 	private:
 		SocketType type = SocketType::INVALID;
-		ConnectionType connectionType = ConnectionType::IPV4;
+		IPVersion ipversion = IPVersion::IPV4;
 		SocketHandle handle = INVALID_SOCKET_CONST;
 		bool isBlocking = false;
 	};

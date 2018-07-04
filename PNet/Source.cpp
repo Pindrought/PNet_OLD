@@ -16,7 +16,7 @@ int serverthread()
 {
     Timer t;
     t.Start();
-	TCPServer server(ConnectionType::IPV4);
+	TCPServer server(IPVersion::IPV4);
 	auto result = server.StartListener();
 	if (result == PRESULT::SUCCESS)
 	{
@@ -37,8 +37,8 @@ int main()
 	std::thread st(serverthread);
 	Sleep(500); //500 miliseconds (half a second)
 
-	TCPClient myConn(ConnectionType::IPV4); //Create IPV4 Client
-	auto result = myConn.Connect(IPAddress("127.0.0.1", ConnectionType::IPV4), 8888, timeout); //Connect ipv6 client to localhost 127.0.0.1 on port 8888 with a timeout up to "timeout"
+	TCPClient myConn(IPVersion::IPV4); //Create IPV4 Client
+	auto result = myConn.Connect(IPAddress("127.0.0.1", IPVersion::IPV4), 8888, timeout); //Connect ipv6 client to localhost 127.0.0.1 on port 8888 with a timeout up to "timeout"
 	if (myConn.IsConnected())
 	{
 		std::cout << "Connected!" << std::endl;
