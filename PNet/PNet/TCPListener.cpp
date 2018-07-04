@@ -4,7 +4,7 @@
 namespace PNet
 {
 	TCPListener::TCPListener(IPVersion ipversion)
-		:Socket(SocketType::TCP, ipversion, INVALID_SOCKET_CONST)
+		:Socket(IPProtocol::TCP, ipversion, INVALID_SOCKET_CONST)
 	{
 	}
 

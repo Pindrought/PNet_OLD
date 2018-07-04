@@ -10,7 +10,7 @@
 #include <netinet/in.h>
 #include <netinet/tcp.h>
 #endif
-#include "SocketType.h"
+#include "IPProtocol.h"
 #include "PRESULT.h"
 #include "IPVersion.h"
 
@@ -23,7 +23,7 @@ namespace PNet
 	class Socket
 	{
 	public:
-		Socket(SocketType type, IPVersion ipversion = IPVersion::IPV4, SocketHandle handle = INVALID_SOCKET_CONST);
+		Socket(IPProtocol ipprotocol, IPVersion ipversion = IPVersion::IPV4, SocketHandle handle = INVALID_SOCKET_CONST);
 	public:
 		SocketHandle GetHandle();
 		IPVersion GetIPVersion();
@@ -33,7 +33,7 @@ namespace PNet
 		bool IsBlocking();
 		PRESULT SetBlocking(bool isBlocking);
 	private:
-		SocketType type = SocketType::INVALID;
+		IPProtocol ipprotocol = IPProtocol::INVALID;
 		IPVersion ipversion = IPVersion::IPV4;
 		SocketHandle handle = INVALID_SOCKET_CONST;
 		bool isBlocking = false;

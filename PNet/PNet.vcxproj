@@ -170,7 +170,7 @@
     <ClInclude Include="PNet\PacketException.h" />
     <ClInclude Include="PNet\PacketType.h" />
     <ClInclude Include="PNet\PRESULT.h" />
-    <ClInclude Include="PNet\SocketType.h" />
+    <ClInclude Include="PNet\IPProtocol.h" />
     <ClInclude Include="PNet\Socket.h" />
     <ClInclude Include="PNet\SocketHandle.h" />
     <ClInclude Include="PNet\TCPSocket.h" />

@@ -71,9 +71,6 @@
     <ClInclude Include="PNet\TCPSocket.h">
       <Filter>Header Files\PNet</Filter>
     </ClInclude>
-    <ClInclude Include="PNet\SocketType.h">
-      <Filter>Header Files\PNet</Filter>
-    </ClInclude>
     <ClInclude Include="PNet\Include.h">
       <Filter>Header Files\PNet</Filter>
     </ClInclude>
@@ -114,6 +111,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PNet\IPVersion.h">
+      <Filter>Header Files\PNet</Filter>
+    </ClInclude>
+    <ClInclude Include="PNet\IPProtocol.h">
       <Filter>Header Files\PNet</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,7 +1,7 @@
 #pragma once
 namespace PNet
 {
-	enum SocketType
+	enum IPProtocol
 	{
 		INVALID,
 		TCP,

@@ -4,7 +4,7 @@
 namespace PNet
 {
 	TCPSocket::TCPSocket(IPVersion ipversion, SocketHandle socketHandle, bool isConnected)
-		:Socket(SocketType::TCP, ipversion, socketHandle)
+		:Socket(IPProtocol::TCP, ipversion, socketHandle)
 	{
 		/*if (IPVersion == IPVersion::IPV6)
 		{

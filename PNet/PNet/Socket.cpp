@@ -9,13 +9,13 @@
 
 namespace PNet
 {
-	Socket::Socket(SocketType type, IPVersion ipversion, SocketHandle handle)
+	Socket::Socket(IPProtocol ipprotocol, IPVersion ipversion, SocketHandle handle)
 	{
-		if (type != SocketType::TCP)
+		if (ipprotocol != IPProtocol::TCP)
 		{
 			throw std::runtime_error("ONLY TCP IS CURRENTLY SUPPORTED");
 		}
-		this->type = type;
+		this->ipprotocol = ipprotocol;
 		this->ipversion = ipversion;
 		this->handle = handle;
 	}
@@ -26,15 +26,15 @@ namespace PNet
 			return PRESULT::SOCKET_ALREADYINITIALIZED;
 		}
 
-		if (type == SocketType::TCP || type == SocketType::UDP)
+		if (ipprotocol == IPProtocol::TCP || ipprotocol == IPProtocol::UDP)
 		{
 			if (this->ipversion == IPVersion::IPV4)
 			{
-				handle = socket(PF_INET, type == SocketType::TCP ? SOCK_STREAM : SOCK_DGRAM, type == SocketType::TCP ? IPPROTO_TCP : IPPROTO_UDP);
+				handle = socket(PF_INET, ipprotocol == IPProtocol::TCP ? SOCK_STREAM : SOCK_DGRAM, ipprotocol == IPProtocol::TCP ? IPPROTO_TCP : IPPROTO_UDP);
 			}
 			else //ipv6
 			{
-				handle = socket(PF_INET6, type == SocketType::TCP ? SOCK_STREAM : SOCK_DGRAM, type == SocketType::TCP ? IPPROTO_TCP: IPPROTO_UDP);
+				handle = socket(PF_INET6, ipprotocol == IPProtocol::TCP ? SOCK_STREAM : SOCK_DGRAM, ipprotocol == IPProtocol::TCP ? IPPROTO_TCP: IPPROTO_UDP);
 			}
 
 			if (handle == INVALID_SOCKET_CONST)
@@ -48,7 +48,7 @@ namespace PNet
 				return result;
 			}
 
-			if (type == SocketType::TCP)
+			if (ipprotocol == IPProtocol::TCP)
 			{
 				// Disable the Nagle algorithm (i.e. removes buffering of TCP packets)
 				int yes = 1;
