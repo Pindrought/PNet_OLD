@@ -45,7 +45,7 @@ namespace PNet
 			if (timeOut.tv_sec == 0 && timeOut.tv_usec == 0)
 			{
 				if (connect(GetHandle(), reinterpret_cast<sockaddr*>(&address), sizeof(address)) == -1)
-					return PRESULT::TCPSOCKET_ConnectionFailed;
+					return PRESULT::TCPSOCKET_CONNECTIONFAILED;
 				isConnected = true;
 				return PRESULT::SUCCESS;
 			}
@@ -75,14 +75,10 @@ namespace PNet
                         #ifdef WIN32
                         return PRESULT::SOCKET_WSALASTERRORNOTSETUP;
                         #else
-
                         std::cerr << "SOCKET ERROR: " << errno << std::endl;
                         std::cerr << "GETSOCKOPT ERROR: " << socketError << std::endl;
                         return PRESULT::SOCKET_WSALASTERRORNOTSETUP;
-
                         #endif
-
-
 					}
 					else
 					{
@@ -95,7 +91,7 @@ namespace PNet
 					return PRESULT::SUCCESS;
 				}
 
-				return PRESULT::TCPSOCKET_ConnectionFailed;
+				return PRESULT::TCPSOCKET_CONNECTIONFAILED;
 			}
 		}
 		else //ipv6
@@ -110,7 +106,7 @@ namespace PNet
 			if (timeOut.tv_sec == 0 && timeOut.tv_usec == 0)
 			{
 				if (connect(GetHandle(), reinterpret_cast<sockaddr*>(&address), sizeof(address)) == -1)
-					return PRESULT::TCPSOCKET_ConnectionFailed;
+					return PRESULT::TCPSOCKET_CONNECTIONFAILED;
 				isConnected = true;
 				return PRESULT::SUCCESS;
 			}
@@ -149,7 +145,7 @@ namespace PNet
 					return PRESULT::SUCCESS;
 				}
 
-				return PRESULT::TCPSOCKET_ConnectionFailed;
+				return PRESULT::TCPSOCKET_CONNECTIONFAILED;
 			}
 		}
 	}

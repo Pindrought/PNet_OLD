@@ -25,7 +25,7 @@ namespace PNet
 			return "Failed to enable broadcast for UDP socket.";
 		case PRESULT::SOCKET_WSALASTERRORGETSOCKOPTFAIL:
 			return "Winsock error occured and getsockopt() failed to retrieve the error code.";
-		case PRESULT::TCPSOCKET_ConnectionFailed:
+		case PRESULT::TCPSOCKET_CONNECTIONFAILED:
 			return "TCP Socket failed to connect.";
         case PRESULT::TCPSOCKET_INVALIDIP:
 			return "Invalid IP Address entered for selected IP version.";
