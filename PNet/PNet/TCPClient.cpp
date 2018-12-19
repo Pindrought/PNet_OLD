@@ -36,7 +36,10 @@ namespace PNet
 			int retval = SOCKET_ERROR;
 			if (this->incoming_packet_task == PacketRetrievalTask::ReceivingPacketSize)
 			{
-				retval = recv(this->GetHandle(), (char*)&this->incoming_packet_length + this->incoming_bytes_received, sizeof(uint32_t) - this->incoming_bytes_received, NULL);
+				int len = sizeof(uint32_t) - this->incoming_bytes_received;
+				uint32_t *packetLengthOffset = &this->incoming_packet_length;
+				char * storageOffset = (char*)packetLengthOffset + this->incoming_bytes_received;
+				retval = recv(this->GetHandle(), storageOffset, len, NULL);
 			}
 			else //RetrievingPacketBuffer
 			{
@@ -78,10 +81,19 @@ namespace PNet
 				{
 					if (this->incoming_bytes_received == sizeof(int32_t)) //If full packet size received
 					{
-                        memset(this->buffer, 0, this->incoming_packet_length);
-						//ZeroMemory(this->buffer, this->incoming_packet_length);
-						this->incoming_bytes_received = 0;
-						this->incoming_packet_task = PacketRetrievalTask::ReceivingPacketBuffer;
+						if (this->incoming_packet_length > MAX_PACKET_SIZE)
+						{
+							std::cerr << "Packet received with size over allowed max of " << MAX_PACKET_SIZE << std::endl;
+							std::cerr << "Terminating connection..." << std::endl;
+							this->Disconnect();
+						}
+						else
+						{
+							memset(this->buffer, 0, this->incoming_packet_length);
+							//ZeroMemory(this->buffer, this->incoming_packet_length);
+							this->incoming_bytes_received = 0;
+							this->incoming_packet_task = PacketRetrievalTask::ReceivingPacketBuffer;
+						}
 					}
 				}
 				else //If ReceivingPacketBuffer

@@ -102,6 +102,7 @@ namespace PNet
 		#endif
 		if (result == 0)
 		{
+			handle = INVALID_SOCKET_CONST;
 			return PRESULT::SUCCESS;
 		}
 		else
